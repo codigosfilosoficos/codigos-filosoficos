@@ -1,5 +1,33 @@
 ---
+import { getCollection } from 'astro:content';
+
 const year = new Date().getFullYear();
+
+const artigos = (
+	await getCollection('artigos', ({ data }) => !data.draft)
+)
+	.sort(
+		(a, b) =>
+			b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+	)
+	.slice(0, 3);
+
+const artigoDestaque =
+	artigos.find((artigo) => artigo.data.featured) ?? artigos[0];
+
+const artigosSecundarios = artigos
+	.filter((artigo) => artigo.id !== artigoDestaque?.id)
+	.slice(0, 2);
+
+const formatarData = (data: Date) =>
+	data
+		.toLocaleDateString('pt-BR', {
+			day: '2-digit',
+			month: 'short',
+			year: 'numeric',
+			timeZone: 'UTC',
+		})
+		.toUpperCase();
 ---
 
 <!doctype html>
@@ -23,7 +51,7 @@ const year = new Date().getFullYear();
 			</a>
 
 			<nav aria-label="Navegação principal">
-				<a href="#artigos">Artigos</a>
+				<a href="/artigos/">Artigos</a>
 				<a href="#projetos">Projetos</a>
 				<a href="#sobre">Sobre</a>
 			</nav>
@@ -46,7 +74,7 @@ const year = new Date().getFullYear();
 					</p>
 
 					<div class="actions">
-						<a class="primary-button" href="#artigos">Explorar artigos</a>
+						<a class="primary-button" href="/artigos/">Explorar artigos</a>
 						<a class="secondary-button" href="#sobre">Conhecer o projeto</a>
 					</div>
 				</div>
@@ -80,52 +108,66 @@ const year = new Date().getFullYear();
 					<span class="section-number">01</span>
 				</div>
 
-				<div class="articles-grid">
-					<article class="featured-card">
-						<div class="card-meta">
-							<span>Cyber Defense</span>
-							<time datetime="2026-06-17">17 JUN 2026</time>
-						</div>
+				<div class={`articles-grid ${artigosSecundarios.length === 0 ? 'single' : ''}`}>
+					{
+						artigoDestaque ? (
+							<article class="featured-card">
+								<div class="card-meta">
+									<span>{artigoDestaque.data.category}</span>
 
-						<h3>Construindo e analisando um Honeypot SSH com Cowrie</h3>
+									<time datetime={artigoDestaque.data.pubDate.toISOString()}>
+										{formatarData(artigoDestaque.data.pubDate)}
+									</time>
+								</div>
 
-						<p>
-							Como configurei uma VPS exposta à internet para observar ataques
-							automatizados, credenciais utilizadas e comandos executados.
-						</p>
+								<h3>
+									<a href={`/artigos/${artigoDestaque.id}/`}>
+										{artigoDestaque.data.title}
+									</a>
+								</h3>
 
-						<span class="read-more">Em breve →</span>
-					</article>
+								<p>{artigoDestaque.data.description}</p>
 
-					<article class="article-card">
-						<div class="card-meta">
-							<span>Inteligência Artificial</span>
-						</div>
+								<a
+									class="read-more"
+									href={`/artigos/${artigoDestaque.id}/`}
+								>
+									Ler artigo →
+								</a>
+							</article>
+						) : (
+							<p>Nenhum artigo publicado ainda.</p>
+						)
+					}
 
-						<h3>Agentes de IA, autonomia e o futuro dos sistemas</h3>
+					{
+						artigosSecundarios.map((artigo) => (
+							<article class="article-card">
+								<div class="card-meta">
+									<span>{artigo.data.category}</span>
 
-						<p>
-							Reflexões sobre agentes, modelos de linguagem e infraestrutura
-							independente.
-						</p>
+									<time datetime={artigo.data.pubDate.toISOString()}>
+										{formatarData(artigo.data.pubDate)}
+									</time>
+								</div>
 
-						<span class="read-more">Em breve →</span>
-					</article>
+								<h3>
+									<a href={`/artigos/${artigo.id}/`}>
+										{artigo.data.title}
+									</a>
+								</h3>
 
-					<article class="article-card">
-						<div class="card-meta">
-							<span>Filosofia</span>
-						</div>
+								<p>{artigo.data.description}</p>
 
-						<h3>Nietzsche, tecnologia e a construção de novos valores</h3>
-
-						<p>
-							Como a filosofia pode ajudar a compreender um mundo moldado por
-							algoritmos.
-						</p>
-
-						<span class="read-more">Em breve →</span>
-					</article>
+								<a
+									class="read-more"
+									href={`/artigos/${artigo.id}/`}
+								>
+									Ler artigo →
+								</a>
+							</article>
+						))
+					}
 				</div>
 			</section>
 
@@ -441,6 +483,10 @@ const year = new Date().getFullYear();
 		display: grid;
 		grid-template-columns: 1.35fr 0.8fr;
 		gap: 18px;
+	}
+
+	.articles-grid.single {
+		grid-template-columns: 1fr;
 	}
 
 	.featured-card,

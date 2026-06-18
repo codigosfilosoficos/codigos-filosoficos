@@ -1,0 +1,318 @@
+---
+import { getCollection } from 'astro:content';
+
+const artigos = (await getCollection('artigos', ({ data }) => !data.draft))
+	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const formatarData = (data: Date) =>
+	data.toLocaleDateString('pt-BR', {
+		day: '2-digit',
+		month: 'long',
+		year: 'numeric',
+		timeZone: 'UTC',
+	});
+---
+
+<!doctype html>
+<html lang="pt-BR">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<meta
+			name="description"
+			content="Artigos do Códigos Filosóficos sobre cibersegurança, inteligência artificial, filosofia e tecnologia."
+		/>
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<title>Artigos | Códigos Filosóficos</title>
+	</head>
+
+	<body>
+		<header class="header">
+			<a class="brand" href="/">
+				<span>&lt;/&gt;</span>
+				Códigos Filosóficos
+			</a>
+
+			<nav>
+				<a class="active" href="/artigos/">Artigos</a>
+				<a href="/#projetos">Projetos</a>
+				<a href="/#sobre">Sobre</a>
+			</nav>
+		</header>
+
+		<main>
+			<section class="intro">
+				<p class="eyebrow">PUBLICAÇÕES</p>
+				<h1>Artigos</h1>
+
+				<p class="description">
+					Estudos, experimentos e reflexões sobre segurança, inteligência
+					artificial, filosofia e o futuro da tecnologia.
+				</p>
+			</section>
+
+			<section class="articles">
+				{
+					artigos.map((artigo) => (
+						<article class="card">
+							<div class="meta">
+								<span>{artigo.data.category}</span>
+								<time datetime={artigo.data.pubDate.toISOString()}>
+									{formatarData(artigo.data.pubDate)}
+								</time>
+							</div>
+
+							<h2>
+								<a href={`/artigos/${artigo.id}/`}>
+									{artigo.data.title}
+								</a>
+							</h2>
+
+							<p>{artigo.data.description}</p>
+
+							<div class="tags">
+								{artigo.data.tags.map((tag) => <span>{tag}</span>)}
+							</div>
+
+							<a class="read-more" href={`/artigos/${artigo.id}/`}>
+								Ler artigo →
+							</a>
+						</article>
+					))
+				}
+			</section>
+		</main>
+
+		<footer>
+			<p>© {new Date().getFullYear()} Códigos Filosóficos</p>
+			<a href="mailto:matheusgagliotti@proton.me">
+				matheusgagliotti@proton.me
+			</a>
+		</footer>
+	</body>
+</html>
+
+<style>
+	:root {
+		--background: #080b0f;
+		--surface: #0f141a;
+		--surface-light: #151c24;
+		--text: #f3f5f7;
+		--muted: #929ca8;
+		--accent: #5cffb0;
+		--border: rgba(255, 255, 255, 0.1);
+		--max-width: 1050px;
+	}
+
+	* {
+		box-sizing: border-box;
+		margin: 0;
+		padding: 0;
+	}
+
+	body {
+		min-height: 100vh;
+		background:
+			radial-gradient(circle at 80% 0%, rgba(92, 255, 176, 0.08), transparent 28rem),
+			var(--background);
+		color: var(--text);
+		font-family:
+			Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+			"Segoe UI", sans-serif;
+		line-height: 1.6;
+	}
+
+	a {
+		color: inherit;
+		text-decoration: none;
+	}
+
+	.header,
+	main,
+	footer {
+		width: min(calc(100% - 40px), var(--max-width));
+		margin-inline: auto;
+	}
+
+	.header {
+		padding: 28px 0;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		border-bottom: 1px solid var(--border);
+	}
+
+	.brand {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		font-weight: 700;
+	}
+
+	.brand span,
+	.active,
+	.eyebrow,
+	.read-more {
+		color: var(--accent);
+	}
+
+	nav {
+		display: flex;
+		gap: 28px;
+	}
+
+	nav a {
+		color: var(--muted);
+		font-size: 0.92rem;
+	}
+
+	nav a:hover {
+		color: var(--accent);
+	}
+
+	.intro {
+		padding: 105px 0 75px;
+	}
+
+	.eyebrow {
+		margin-bottom: 18px;
+		font-family: monospace;
+		font-size: 0.76rem;
+		font-weight: 700;
+		letter-spacing: 0.14em;
+	}
+
+	h1 {
+		font-size: clamp(3.8rem, 10vw, 7.5rem);
+		line-height: 0.9;
+		letter-spacing: -0.065em;
+	}
+
+	.description {
+		max-width: 660px;
+		margin-top: 32px;
+		color: var(--muted);
+		font-size: 1.12rem;
+	}
+
+	.articles {
+		padding-bottom: 110px;
+		display: grid;
+		gap: 18px;
+	}
+
+	.card {
+		padding: 38px;
+		border: 1px solid var(--border);
+		border-radius: 10px;
+		background: var(--surface);
+		transition:
+			transform 0.2s ease,
+			border-color 0.2s ease;
+	}
+
+	.card:hover {
+		transform: translateY(-3px);
+		border-color: rgba(92, 255, 176, 0.45);
+	}
+
+	.meta {
+		display: flex;
+		justify-content: space-between;
+		gap: 20px;
+		margin-bottom: 22px;
+		font-family: monospace;
+		font-size: 0.74rem;
+		text-transform: uppercase;
+	}
+
+	.meta span {
+		color: var(--accent);
+	}
+
+	.meta time,
+	.card p {
+		color: var(--muted);
+	}
+
+	h2 {
+		max-width: 790px;
+		font-size: clamp(1.8rem, 4vw, 3rem);
+		line-height: 1.12;
+		letter-spacing: -0.04em;
+	}
+
+	h2 a:hover {
+		color: var(--accent);
+	}
+
+	.card p {
+		max-width: 720px;
+		margin-top: 18px;
+	}
+
+	.tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+		margin-top: 26px;
+	}
+
+	.tags span {
+		padding: 5px 9px;
+		border-radius: 4px;
+		background: var(--surface-light);
+		color: var(--muted);
+		font-family: monospace;
+		font-size: 0.7rem;
+	}
+
+	.read-more {
+		display: inline-block;
+		margin-top: 28px;
+		font-weight: 700;
+	}
+
+	footer {
+		padding: 35px 0 50px;
+		display: flex;
+		justify-content: space-between;
+		gap: 20px;
+		border-top: 1px solid var(--border);
+		color: var(--muted);
+		font-size: 0.78rem;
+	}
+
+	footer a:hover {
+		color: var(--accent);
+	}
+
+	@media (max-width: 620px) {
+		.header {
+			align-items: flex-start;
+			flex-direction: column;
+			gap: 22px;
+		}
+
+		nav {
+			gap: 18px;
+		}
+
+		.intro {
+			padding-top: 75px;
+		}
+
+		.card {
+			padding: 25px;
+		}
+
+		.meta,
+		footer {
+			flex-direction: column;
+		}
+
+		.meta {
+			gap: 6px;
+		}
+	}
+</style>

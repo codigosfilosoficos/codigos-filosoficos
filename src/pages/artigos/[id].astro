@@ -1,0 +1,365 @@
+---
+import {
+	getCollection,
+	render,
+	type CollectionEntry,
+} from 'astro:content';
+
+export async function getStaticPaths() {
+	const artigos = await getCollection(
+		'artigos',
+		({ data }) => !data.draft,
+	);
+
+	return artigos.map((artigo) => ({
+		params: { id: artigo.id },
+		props: { artigo },
+	}));
+}
+
+interface Props {
+	artigo: CollectionEntry<'artigos'>;
+}
+
+const { artigo } = Astro.props;
+const { Content } = await render(artigo);
+
+const dataFormatada = artigo.data.pubDate.toLocaleDateString('pt-BR', {
+	day: '2-digit',
+	month: 'long',
+	year: 'numeric',
+	timeZone: 'UTC',
+});
+---
+
+<!doctype html>
+<html lang="pt-BR">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="description" content={artigo.data.description} />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+		<title>{artigo.data.title} | Códigos Filosóficos</title>
+	</head>
+
+	<body>
+		<header class="header">
+			<a class="brand" href="/">
+				<span>&lt;/&gt;</span>
+				Códigos Filosóficos
+			</a>
+
+			<nav>
+				<a href="/artigos/">Artigos</a>
+				<a href="/#projetos">Projetos</a>
+				<a href="/#sobre">Sobre</a>
+			</nav>
+		</header>
+
+		<main>
+			<a class="back" href="/artigos/">← Todos os artigos</a>
+
+			<article>
+				<header class="article-header">
+					<p class="category">{artigo.data.category}</p>
+
+					<h1>{artigo.data.title}</h1>
+
+					<p class="description">{artigo.data.description}</p>
+
+					<div class="article-meta">
+						<span>Por {artigo.data.author}</span>
+						<time datetime={artigo.data.pubDate.toISOString()}>
+							{dataFormatada}
+						</time>
+					</div>
+
+					<div class="tags">
+						{artigo.data.tags.map((tag) => <span>{tag}</span>)}
+					</div>
+				</header>
+
+				<div class="prose">
+					<Content />
+				</div>
+			</article>
+		</main>
+
+		<footer>
+			<p>© {new Date().getFullYear()} Códigos Filosóficos</p>
+			<a href="mailto:matheusgagliotti@proton.me">
+				matheusgagliotti@proton.me
+			</a>
+		</footer>
+	</body>
+</html>
+
+<style>
+	:root {
+		--background: #080b0f;
+		--surface: #0f141a;
+		--surface-light: #151c24;
+		--text: #f3f5f7;
+		--muted: #929ca8;
+		--accent: #5cffb0;
+		--border: rgba(255, 255, 255, 0.1);
+		--max-width: 1050px;
+		--article-width: 760px;
+	}
+
+	* {
+		box-sizing: border-box;
+		margin: 0;
+		padding: 0;
+	}
+
+	body {
+		min-height: 100vh;
+		background:
+			radial-gradient(circle at 75% 0%, rgba(92, 255, 176, 0.08), transparent 28rem),
+			var(--background);
+		color: var(--text);
+		font-family:
+			Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+			"Segoe UI", sans-serif;
+		line-height: 1.7;
+	}
+
+	a {
+		color: inherit;
+		text-decoration: none;
+	}
+
+	.header,
+	main,
+	footer {
+		width: min(calc(100% - 40px), var(--max-width));
+		margin-inline: auto;
+	}
+
+	.header {
+		padding: 28px 0;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		border-bottom: 1px solid var(--border);
+	}
+
+	.brand {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		font-weight: 700;
+	}
+
+	.brand span,
+	nav a:hover,
+	.back,
+	.category {
+		color: var(--accent);
+	}
+
+	nav {
+		display: flex;
+		gap: 28px;
+	}
+
+	nav a {
+		color: var(--muted);
+		font-size: 0.92rem;
+	}
+
+	main {
+		padding: 70px 0 120px;
+	}
+
+	.back {
+		display: inline-block;
+		margin-bottom: 70px;
+		font-family: monospace;
+		font-size: 0.82rem;
+	}
+
+	.article-header,
+	.prose {
+		width: min(100%, var(--article-width));
+		margin-inline: auto;
+	}
+
+	.article-header {
+		padding-bottom: 55px;
+		border-bottom: 1px solid var(--border);
+	}
+
+	.category {
+		margin-bottom: 22px;
+		font-family: monospace;
+		font-size: 0.76rem;
+		font-weight: 700;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+	}
+
+	h1 {
+		font-size: clamp(2.8rem, 7vw, 5.4rem);
+		line-height: 0.98;
+		letter-spacing: -0.06em;
+	}
+
+	.description {
+		margin-top: 30px;
+		color: var(--muted);
+		font-size: 1.18rem;
+	}
+
+	.article-meta {
+		margin-top: 34px;
+		display: flex;
+		justify-content: space-between;
+		gap: 20px;
+		color: var(--muted);
+		font-family: monospace;
+		font-size: 0.78rem;
+	}
+
+	.tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+		margin-top: 24px;
+	}
+
+	.tags span {
+		padding: 5px 9px;
+		border-radius: 4px;
+		background: var(--surface-light);
+		color: var(--muted);
+		font-family: monospace;
+		font-size: 0.7rem;
+	}
+
+	.prose {
+		padding-top: 60px;
+		color: #d4d9df;
+		font-size: 1.08rem;
+	}
+
+	.prose :global(p) {
+		margin: 0 0 1.55em;
+	}
+
+	.prose :global(h2) {
+		margin: 2.2em 0 0.8em;
+		color: var(--text);
+		font-size: 2rem;
+		line-height: 1.15;
+		letter-spacing: -0.035em;
+	}
+
+	.prose :global(h3) {
+		margin: 2em 0 0.7em;
+		color: var(--text);
+		font-size: 1.45rem;
+	}
+
+	.prose :global(ul),
+	.prose :global(ol) {
+		margin: 0 0 1.6em 1.4em;
+	}
+
+	.prose :global(li) {
+		margin-bottom: 0.55em;
+	}
+
+	.prose :global(strong) {
+		color: var(--text);
+	}
+
+	.prose :global(a) {
+		color: var(--accent);
+		text-decoration: underline;
+		text-underline-offset: 3px;
+	}
+
+	.prose :global(code) {
+		padding: 0.15em 0.4em;
+		border-radius: 4px;
+		background: var(--surface-light);
+		color: var(--accent);
+		font-family: "SFMono-Regular", Consolas, monospace;
+		font-size: 0.9em;
+	}
+
+	.prose :global(pre) {
+		overflow-x: auto;
+		margin: 2em 0;
+		padding: 22px;
+		border: 1px solid var(--border);
+		border-radius: 9px;
+		background: var(--surface);
+	}
+
+	.prose :global(pre code) {
+		padding: 0;
+		background: transparent;
+		color: #d9e1e8;
+	}
+
+	.prose :global(blockquote) {
+		margin: 2em 0;
+		padding: 5px 0 5px 22px;
+		border-left: 3px solid var(--accent);
+		color: var(--muted);
+	}
+
+	.prose :global(img) {
+		max-width: 100%;
+		margin: 2em 0;
+		border: 1px solid var(--border);
+		border-radius: 9px;
+	}
+
+	footer {
+		padding: 35px 0 50px;
+		display: flex;
+		justify-content: space-between;
+		gap: 20px;
+		border-top: 1px solid var(--border);
+		color: var(--muted);
+		font-size: 0.78rem;
+	}
+
+	footer a:hover {
+		color: var(--accent);
+	}
+
+	@media (max-width: 620px) {
+		.header {
+			align-items: flex-start;
+			flex-direction: column;
+			gap: 22px;
+		}
+
+		nav {
+			gap: 18px;
+		}
+
+		main {
+			padding-top: 50px;
+		}
+
+		.back {
+			margin-bottom: 45px;
+		}
+
+		.article-meta,
+		footer {
+			flex-direction: column;
+		}
+
+		.article-meta {
+			gap: 6px;
+		}
+	}
+</style>
