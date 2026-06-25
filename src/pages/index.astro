@@ -1,34 +1,26 @@
 ---
 import { getCollection } from 'astro:content';
-import { getArticleUrl } from '../lib/blog';
+import { categorias, getArticleUrl } from '../lib/blog';
 
 const year = new Date().getFullYear();
 
-const artigos = (
-	await getCollection('artigos', ({ data }) => !data.draft)
-)
-	.sort(
-		(a, b) =>
-			b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-	)
-	.slice(0, 3);
+const artigos = (await getCollection('artigos', ({ data }) => !data.draft))
+	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
 const artigoDestaque =
 	artigos.find((artigo) => artigo.data.featured) ?? artigos[0];
 
-const artigosSecundarios = artigos
+const artigosRecentes = artigos
 	.filter((artigo) => artigo.id !== artigoDestaque?.id)
-	.slice(0, 2);
+	.slice(0, 4);
 
 const formatarData = (data: Date) =>
-	data
-		.toLocaleDateString('pt-BR', {
-			day: '2-digit',
-			month: 'short',
-			year: 'numeric',
-			timeZone: 'UTC',
-		})
-		.toUpperCase();
+	data.toLocaleDateString('pt-BR', {
+		day: '2-digit',
+		month: 'short',
+		year: 'numeric',
+		timeZone: 'UTC',
+	}).toUpperCase();
 ---
 
 <!doctype html>
@@ -38,84 +30,82 @@ const formatarData = (data: Date) =>
 		<meta name="viewport" content="width=device-width" />
 		<meta
 			name="description"
-			content="Códigos Filosóficos — tecnologia, cibersegurança, inteligência artificial e filosofia."
+			content="Códigos Filosóficos: inteligência artificial, defesa cibernética, filosofia e soberania digital."
 		/>
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<title>Códigos Filosóficos</title>
 	</head>
 
 	<body>
-		<header class="header">
+		<header class="site-header">
 			<a class="brand" href="/">
-				<span class="brand-mark">&lt;/&gt;</span>
-				<span>Códigos Filosóficos</span>
+				<span>&lt;/&gt;</span>
+				Códigos Filosóficos
 			</a>
 
-			<nav aria-label="Navegação principal">
+			<nav>
 				<a href="/artigos/">Artigos</a>
-				<a href="#projetos">Projetos</a>
-				<a href="#sobre">Sobre</a>
+				<a href="/defesa-cibernetica/">Defesa Cibernética</a>
+				<a href="/inteligencia-artificial/">IA</a>
+				<a href="#categorias">Categorias</a>
 			</nav>
 		</header>
 
 		<main>
 			<section class="hero">
-				<div class="hero-content">
+				<div>
 					<p class="eyebrow">TECNOLOGIA • FILOSOFIA • CIBERSEGURANÇA</p>
 
 					<h1>
 						Pensar o mundo.<br />
 						Entender os sistemas.<br />
-						<span>Escrever o código.</span>
+						Escrever o código.
 					</h1>
 
 					<p class="hero-text">
-						Um espaço independente sobre defesa cibernética, inteligência
-						artificial, filosofia, privacidade e o futuro da tecnologia.
+						Uma base de conhecimento sobre inteligência artificial, defesa
+						cibernética, filosofia, soberania digital e laboratórios práticos.
 					</p>
 
-					<div class="actions">
-						<a class="primary-button" href="/artigos/">Explorar artigos</a>
-						<a class="secondary-button" href="#sobre">Conhecer o projeto</a>
+					<div class="hero-actions">
+						<a class="primary" href="/artigos/">Ver artigos</a>
+						<a class="secondary" href="/defesa-cibernetica/honeypot-cowrie/">
+							Ler análise do Cowrie
+						</a>
 					</div>
 				</div>
 
-				<div class="terminal" aria-label="Terminal decorativo">
-					<div class="terminal-header">
+				<div class="terminal-card" aria-label="Terminal decorativo">
+					<div class="terminal-bar">
 						<span></span>
 						<span></span>
 						<span></span>
 					</div>
 
-					<div class="terminal-body">
-						<p><strong>matheus@codigos:</strong>~$ whoami</p>
-						<p class="output">estudante, pesquisador, construtor</p>
-						<p><strong>matheus@codigos:</strong>~$ cat manifesto.txt</p>
-						<p class="output">
-							Conhecimento técnico é uma forma de autonomia.
-						</p>
-						<p><strong>matheus@codigos:</strong>~$ <span class="cursor">█</span></p>
-					</div>
+					<pre><code>matheus@codigos:~$ whoami
+estudante, pesquisador, construtor
+
+matheus@codigos:~$ cat manifesto.txt
+Conhecimento técnico é uma forma de autonomia.
+
+matheus@codigos:~$ ls categorias/
+ia  cyber  filosofia  soberania  labs</code></pre>
 				</div>
 			</section>
 
 			<section class="section" id="artigos">
-				<div class="section-heading">
-					<div>
-						<p class="eyebrow">PUBLICAÇÕES</p>
-						<h2>Artigos recentes</h2>
-					</div>
-
-					<span class="section-number">01</span>
+				<div class="section-header">
+					<p class="eyebrow">PUBLICAÇÕES</p>
+					<h2>Últimos artigos</h2>
+					<a href="/artigos/">Ver todos →</a>
 				</div>
 
-				<div class={`articles-grid ${artigosSecundarios.length === 0 ? 'single' : ''}`}>
-					{
-						artigoDestaque ? (
+				{
+					artigoDestaque ? (
+						<div class="featured-grid">
 							<article class="featured-card">
-								<div class="card-meta">
+								<div class="meta">
 									<span>{artigoDestaque.data.category}</span>
-
 									<time datetime={artigoDestaque.data.pubDate.toISOString()}>
 										{formatarData(artigoDestaque.data.pubDate)}
 									</time>
@@ -129,122 +119,97 @@ const formatarData = (data: Date) =>
 
 								<p>{artigoDestaque.data.description}</p>
 
-								<a
-									class="read-more"
-									href={getArticleUrl(artigoDestaque)}
-								>
-									Ler artigo →
-								</a>
-							</article>
-						) : (
-							<p>Nenhum artigo publicado ainda.</p>
-						)
-					}
-
-					{
-						artigosSecundarios.map((artigo) => (
-							<article class="article-card">
-								<div class="card-meta">
-									<span>{artigo.data.category}</span>
-
-									<time datetime={artigo.data.pubDate.toISOString()}>
-										{formatarData(artigo.data.pubDate)}
-									</time>
+								<div class="tags">
+									{artigoDestaque.data.tags.map((tag) => <span>{tag}</span>)}
 								</div>
 
-								<h3>
-									<a href={getArticleUrl(artigo)}>
-										{artigo.data.title}
-									</a>
-								</h3>
-
-								<p>{artigo.data.description}</p>
-
-								<a
-									class="read-more"
-									href={getArticleUrl(artigo)}
-								>
+								<a class="read-more" href={getArticleUrl(artigoDestaque)}>
 									Ler artigo →
 								</a>
 							</article>
+
+							<div class="recent-list">
+								{
+									artigosRecentes.length > 0 ? (
+										artigosRecentes.map((artigo) => (
+											<article class="small-card">
+												<div class="meta">
+													<span>{artigo.data.category}</span>
+													<time datetime={artigo.data.pubDate.toISOString()}>
+														{formatarData(artigo.data.pubDate)}
+													</time>
+												</div>
+
+												<h3>
+													<a href={getArticleUrl(artigo)}>
+														{artigo.data.title}
+													</a>
+												</h3>
+
+												<p>{artigo.data.description}</p>
+
+												<a class="read-more" href={getArticleUrl(artigo)}>
+													Ler →
+												</a>
+											</article>
+										))
+									) : (
+										<div class="empty-card">
+											<p>
+												Novos artigos aparecerão aqui conforme forem publicados.
+											</p>
+										</div>
+									)
+								}
+							</div>
+						</div>
+					) : (
+						<div class="empty-card">
+							<p>Nenhum artigo publicado ainda.</p>
+						</div>
+					)
+				}
+			</section>
+
+			<section class="section" id="categorias">
+				<div class="section-header">
+					<p class="eyebrow">ORGANIZAÇÃO</p>
+					<h2>Categorias do blog</h2>
+				</div>
+
+				<div class="categories-grid">
+					{
+						categorias.map((categoria) => (
+							<a class="category-card" href={`/${categoria.slug}/`}>
+								<span>{categoria.title}</span>
+								<p>{categoria.description}</p>
+							</a>
 						))
 					}
 				</div>
 			</section>
 
-			<section class="section" id="projetos">
-				<div class="section-heading">
-					<div>
-						<p class="eyebrow">LABORATÓRIO</p>
-						<h2>Projetos</h2>
-					</div>
+			<section class="section manifesto" id="sobre">
+				<p class="eyebrow">MANIFESTO</p>
 
-					<span class="section-number">02</span>
-				</div>
+				<h2>
+					O blog não é apenas um lugar para postar textos. É um laboratório
+					público de pensamento técnico.
+				</h2>
 
-				<div class="projects-grid">
-					<article class="project-card">
-						<span class="project-status">ATIVO</span>
-						<h3>Honeypot Cowrie</h3>
-						<p>
-							Coleta e análise de tentativas de invasão, comandos e amostras
-							maliciosas em uma VPS.
-						</p>
-						<div class="tags">
-							<span>Linux</span>
-							<span>SSH</span>
-							<span>Threat Intelligence</span>
-						</div>
-					</article>
-
-					<article class="project-card">
-						<span class="project-status planning">EM CONSTRUÇÃO</span>
-						<h3>Agente pessoal de IA</h3>
-						<p>
-							Experimentos com agentes, automação, APIs e infraestrutura
-							privada.
-						</p>
-						<div class="tags">
-							<span>Python</span>
-							<span>LLMs</span>
-							<span>Docker</span>
-						</div>
-					</article>
-				</div>
-			</section>
-
-			<section class="section about" id="sobre">
-				<div class="section-heading">
-					<div>
-						<p class="eyebrow">MANIFESTO</p>
-						<h2>Sobre o projeto</h2>
-					</div>
-
-					<span class="section-number">03</span>
-				</div>
-
-				<div class="about-content">
-					<p class="about-lead">
-						Códigos Filosóficos é um blog independente criado para documentar
-						estudos, projetos e reflexões sobre tecnologia.
-					</p>
-
-					<div class="about-text">
-						<p>
-							A proposta é unir conhecimento técnico e pensamento crítico:
-							entender como os sistemas funcionam, quem os controla e como
-							podemos construir alternativas mais seguras e autônomas.
-						</p>
-
-						<a href="mailto:matheusgagliotti@proton.me">matheusgagliotti@proton.me →</a>
-					</div>
-				</div>
+				<p>
+					A proposta do Códigos Filosóficos é documentar estudos, projetos,
+					laboratórios e reflexões sobre tecnologia, segurança, inteligência
+					artificial e soberania digital.
+				</p>
 			</section>
 		</main>
 
 		<footer>
 			<p>© {year} Códigos Filosóficos</p>
-			<p>Construído com Astro e publicado na Cloudflare.</p>
+			<a href="mailto:matheusgagliotti@proton.me">
+				matheusgagliotti@proton.me
+			</a>
 		</footer>
 	</body>
 </html>
@@ -257,7 +222,6 @@ const formatarData = (data: Date) =>
 		--text: #f3f5f7;
 		--muted: #929ca8;
 		--accent: #5cffb0;
-		--accent-dark: #23c87c;
 		--border: rgba(255, 255, 255, 0.1);
 		--max-width: 1180px;
 	}
@@ -275,12 +239,13 @@ const formatarData = (data: Date) =>
 	body {
 		min-height: 100vh;
 		background:
-			radial-gradient(circle at 80% 10%, rgba(92, 255, 176, 0.08), transparent 28rem),
+			radial-gradient(circle at 80% 0%, rgba(92, 255, 176, 0.1), transparent 30rem),
+			radial-gradient(circle at 0% 20%, rgba(70, 110, 255, 0.08), transparent 28rem),
 			var(--background);
 		color: var(--text);
 		font-family:
-			Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-			sans-serif;
+			Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+			"Segoe UI", sans-serif;
 		line-height: 1.6;
 	}
 
@@ -289,9 +254,14 @@ const formatarData = (data: Date) =>
 		text-decoration: none;
 	}
 
-	.header {
+	.site-header,
+	main,
+	footer {
 		width: min(calc(100% - 40px), var(--max-width));
-		margin: 0 auto;
+		margin-inline: auto;
+	}
+
+	.site-header {
 		padding: 28px 0;
 		display: flex;
 		align-items: center;
@@ -304,295 +274,212 @@ const formatarData = (data: Date) =>
 		align-items: center;
 		gap: 12px;
 		font-weight: 700;
-		letter-spacing: -0.02em;
 	}
 
-	.brand-mark {
+	.brand span,
+	.eyebrow,
+	.read-more,
+	.section-header a {
 		color: var(--accent);
-		font-family: monospace;
-		font-size: 1.1rem;
 	}
 
 	nav {
 		display: flex;
-		gap: 30px;
+		gap: 24px;
 	}
 
 	nav a {
 		color: var(--muted);
 		font-size: 0.92rem;
-		transition: color 0.2s ease;
 	}
 
 	nav a:hover {
 		color: var(--accent);
 	}
 
-	main,
-	footer {
-		width: min(calc(100% - 40px), var(--max-width));
-		margin: 0 auto;
-	}
-
 	.hero {
-		min-height: 720px;
+		min-height: 76vh;
+		padding: 95px 0 80px;
 		display: grid;
-		grid-template-columns: 1.15fr 0.85fr;
+		grid-template-columns: minmax(0, 1.1fr) minmax(340px, 0.9fr);
+		gap: 55px;
 		align-items: center;
-		gap: 80px;
-		padding: 90px 0;
 	}
 
 	.eyebrow {
-		margin-bottom: 20px;
-		color: var(--accent);
+		margin-bottom: 18px;
 		font-family: monospace;
-		font-size: 0.78rem;
+		font-size: 0.76rem;
 		font-weight: 700;
 		letter-spacing: 0.14em;
 	}
 
 	h1 {
-		max-width: 780px;
-		font-size: clamp(3rem, 6.5vw, 6.1rem);
-		line-height: 0.98;
-		letter-spacing: -0.065em;
-	}
-
-	h1 span {
-		color: var(--accent);
+		font-size: clamp(3.4rem, 8vw, 7rem);
+		line-height: 0.92;
+		letter-spacing: -0.075em;
 	}
 
 	.hero-text {
-		max-width: 630px;
+		max-width: 700px;
 		margin-top: 32px;
 		color: var(--muted);
-		font-size: 1.14rem;
+		font-size: 1.13rem;
 	}
 
-	.actions {
+	.hero-actions {
+		margin-top: 36px;
 		display: flex;
+		flex-wrap: wrap;
 		gap: 14px;
-		margin-top: 38px;
 	}
 
-	.primary-button,
-	.secondary-button {
-		padding: 13px 20px;
-		border: 1px solid var(--border);
+	.primary,
+	.secondary {
+		padding: 13px 18px;
 		border-radius: 6px;
-		font-size: 0.92rem;
 		font-weight: 700;
-		transition:
-			transform 0.2s ease,
-			background 0.2s ease;
 	}
 
-	.primary-button {
+	.primary {
 		background: var(--accent);
-		color: #07110c;
-		border-color: var(--accent);
+		color: #05100b;
 	}
 
-	.secondary-button {
-		background: var(--surface);
-	}
-
-	.primary-button:hover,
-	.secondary-button:hover {
-		transform: translateY(-2px);
-	}
-
-	.terminal {
-		overflow: hidden;
+	.secondary {
 		border: 1px solid var(--border);
-		border-radius: 12px;
-		background: rgba(15, 20, 26, 0.94);
-		box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
-		transform: rotate(1.5deg);
+		color: var(--text);
 	}
 
-	.terminal-header {
-		height: 42px;
-		display: flex;
-		align-items: center;
-		gap: 7px;
-		padding: 0 16px;
-		border-bottom: 1px solid var(--border);
-	}
-
-	.terminal-header span {
-		width: 9px;
-		height: 9px;
-		border-radius: 50%;
-		background: #39414b;
-	}
-
-	.terminal-body {
-		min-height: 280px;
-		padding: 24px;
-		font-family: "SFMono-Regular", Consolas, monospace;
-		font-size: 0.84rem;
-		line-height: 1.9;
-	}
-
-	.terminal-body strong,
-	.cursor {
-		color: var(--accent);
-	}
-
-	.output {
-		color: var(--muted);
-		padding-left: 18px;
-	}
-
-	.cursor {
-		animation: blink 1s steps(2, start) infinite;
-	}
-
-	@keyframes blink {
-		50% {
-			opacity: 0;
-		}
-	}
-
-	.section {
-		padding: 110px 0;
-		border-top: 1px solid var(--border);
-	}
-
-	.section-heading {
-		display: flex;
-		align-items: flex-start;
-		justify-content: space-between;
-		margin-bottom: 55px;
-	}
-
-	h2 {
-		font-size: clamp(2.2rem, 5vw, 4.2rem);
-		line-height: 1;
-		letter-spacing: -0.05em;
-	}
-
-	.section-number {
-		color: var(--muted);
-		font-family: monospace;
-		font-size: 0.82rem;
-	}
-
-	.articles-grid {
-		display: grid;
-		grid-template-columns: 1.35fr 0.8fr;
-		gap: 18px;
-	}
-
-	.articles-grid.single {
-		grid-template-columns: 1fr;
-	}
-
-	.featured-card,
-	.article-card,
-	.project-card {
-		padding: 32px;
-		border: 1px solid var(--border);
-		border-radius: 10px;
-		background: var(--surface);
-		transition:
-			transform 0.2s ease,
-			border-color 0.2s ease;
-	}
-
-	.featured-card {
-		grid-row: span 2;
-		min-height: 480px;
-		display: flex;
-		flex-direction: column;
-		justify-content: flex-end;
-		background:
-			linear-gradient(to top, rgba(8, 11, 15, 0.98), rgba(8, 11, 15, 0.2)),
-			radial-gradient(circle at top right, rgba(92, 255, 176, 0.19), transparent 20rem),
-			var(--surface);
-	}
-
-	.featured-card:hover,
-	.article-card:hover,
-	.project-card:hover {
-		transform: translateY(-3px);
+	.secondary:hover {
 		border-color: rgba(92, 255, 176, 0.45);
 	}
 
-	.card-meta {
+	.terminal-card {
+		border: 1px solid var(--border);
+		border-radius: 12px;
+		background: rgba(15, 20, 26, 0.78);
+		box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+		overflow: hidden;
+	}
+
+	.terminal-bar {
+		padding: 14px 16px;
 		display: flex;
+		gap: 8px;
+		border-bottom: 1px solid var(--border);
+		background: var(--surface-light);
+	}
+
+	.terminal-bar span {
+		width: 10px;
+		height: 10px;
+		border-radius: 999px;
+		background: var(--muted);
+		opacity: 0.45;
+	}
+
+	pre {
+		overflow-x: auto;
+		padding: 24px;
+		color: #dce4ea;
+		font-family: "SFMono-Regular", Consolas, monospace;
+		font-size: 0.85rem;
+		line-height: 1.75;
+	}
+
+	.section {
+		padding: 90px 0;
+		border-top: 1px solid var(--border);
+	}
+
+	.section-header {
+		margin-bottom: 35px;
+		display: flex;
+		align-items: end;
 		justify-content: space-between;
 		gap: 20px;
-		margin-bottom: 22px;
-		color: var(--accent);
-		font-family: monospace;
-		font-size: 0.74rem;
-		text-transform: uppercase;
 	}
 
-	.card-meta time {
-		color: var(--muted);
+	h2 {
+		font-size: clamp(2.4rem, 5vw, 4.7rem);
+		line-height: 0.98;
+		letter-spacing: -0.06em;
 	}
 
-	h3 {
-		margin-bottom: 18px;
-		font-size: 1.55rem;
-		line-height: 1.2;
-		letter-spacing: -0.025em;
-	}
-
-	.featured-card h3 {
-		max-width: 720px;
-		font-size: clamp(2rem, 4vw, 3.4rem);
-	}
-
-	.featured-card p,
-	.article-card p,
-	.project-card p {
-		color: var(--muted);
-	}
-
-	.read-more {
-		display: inline-block;
-		margin-top: 26px;
-		color: var(--accent);
-		font-size: 0.9rem;
-		font-weight: 700;
-	}
-
-	.projects-grid {
+	.featured-grid {
 		display: grid;
-		grid-template-columns: repeat(2, 1fr);
+		grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
 		gap: 18px;
 	}
 
-	.project-card {
-		min-height: 310px;
+	.featured-card,
+	.small-card,
+	.empty-card,
+	.category-card {
+		border: 1px solid var(--border);
+		border-radius: 10px;
+		background: var(--surface);
 	}
 
-	.project-status {
-		display: inline-block;
-		margin-bottom: 50px;
-		padding: 5px 9px;
-		border: 1px solid rgba(92, 255, 176, 0.35);
-		border-radius: 999px;
-		color: var(--accent);
+	.featured-card {
+		padding: 40px;
+	}
+
+	.small-card,
+	.empty-card,
+	.category-card {
+		padding: 28px;
+	}
+
+	.recent-list {
+		display: grid;
+		gap: 18px;
+	}
+
+	.meta {
+		margin-bottom: 18px;
+		display: flex;
+		justify-content: space-between;
+		gap: 18px;
+		color: var(--muted);
 		font-family: monospace;
-		font-size: 0.68rem;
+		font-size: 0.72rem;
+		text-transform: uppercase;
 	}
 
-	.project-status.planning {
-		color: #f4c95d;
-		border-color: rgba(244, 201, 93, 0.35);
+	.meta span {
+		color: var(--accent);
+	}
+
+	h3 {
+		font-size: clamp(1.5rem, 3vw, 2.65rem);
+		line-height: 1.08;
+		letter-spacing: -0.04em;
+	}
+
+	.small-card h3 {
+		font-size: 1.45rem;
+	}
+
+	h3 a:hover {
+		color: var(--accent);
+	}
+
+	.featured-card p,
+	.small-card p,
+	.empty-card p,
+	.category-card p,
+	.manifesto p {
+		margin-top: 18px;
+		color: var(--muted);
 	}
 
 	.tags {
+		margin-top: 24px;
 		display: flex;
 		flex-wrap: wrap;
 		gap: 8px;
-		margin-top: 30px;
 	}
 
 	.tags span {
@@ -604,111 +491,154 @@ const formatarData = (data: Date) =>
 		font-size: 0.7rem;
 	}
 
-	.about-content {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		gap: 90px;
-	}
-
-	.about-lead {
-		font-size: clamp(1.8rem, 3.2vw, 3rem);
-		line-height: 1.2;
-		letter-spacing: -0.035em;
-	}
-
-	.about-text {
-		color: var(--muted);
-		font-size: 1.05rem;
-	}
-
-	.about-text a {
+	.read-more {
 		display: inline-block;
-		margin-top: 28px;
-		color: var(--accent);
-		font-family: monospace;
+		margin-top: 26px;
+		font-weight: 700;
+	}
+
+	.categories-grid {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 18px;
+	}
+
+	.category-card {
+		min-height: 190px;
+		transition:
+			transform 0.2s ease,
+			border-color 0.2s ease;
+	}
+
+	.category-card:hover {
+		transform: translateY(-3px);
+		border-color: rgba(92, 255, 176, 0.45);
+	}
+
+	.category-card span {
+		color: var(--text);
+		font-size: 1.35rem;
+		font-weight: 800;
+		letter-spacing: -0.03em;
+	}
+
+	.manifesto {
+		max-width: 900px;
+	}
+
+	.manifesto h2 {
+		font-size: clamp(2.2rem, 5vw, 4.5rem);
+	}
+
+	.manifesto p {
+		max-width: 760px;
+		font-size: 1.12rem;
 	}
 
 	footer {
-		padding: 36px 0 50px;
+		padding: 35px 0 50px;
 		display: flex;
 		justify-content: space-between;
-		gap: 30px;
+		gap: 20px;
 		border-top: 1px solid var(--border);
 		color: var(--muted);
 		font-size: 0.78rem;
 	}
 
-	@media (max-width: 850px) {
-		.header {
+	footer a:hover {
+		color: var(--accent);
+	}
+
+	@media (max-width: 900px) {
+		.hero,
+		.featured-grid,
+		.categories-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	@media (max-width: 650px) {
+		.site-header {
 			align-items: flex-start;
-			gap: 24px;
+			flex-direction: column;
+			gap: 22px;
 		}
 
 		nav {
-			gap: 15px;
+			flex-wrap: wrap;
+			gap: 16px;
 		}
 
 		.hero {
-			min-height: auto;
-			grid-template-columns: 1fr;
-			gap: 55px;
-			padding: 80px 0;
+			padding-top: 70px;
 		}
 
-		.terminal {
-			transform: none;
-		}
-
-		.articles-grid,
-		.projects-grid,
-		.about-content {
-			grid-template-columns: 1fr;
-		}
-
-		.featured-card {
-			grid-row: auto;
-			min-height: 420px;
-		}
-
-		.about-content {
-			gap: 40px;
-		}
-	}
-
-	@media (max-width: 580px) {
-		.header {
+		.section-header {
+			align-items: flex-start;
 			flex-direction: column;
-		}
-
-		.hero {
-			padding-top: 60px;
-		}
-
-		h1 {
-			font-size: 3.15rem;
-		}
-
-		.actions {
-			flex-direction: column;
-		}
-
-		.primary-button,
-		.secondary-button {
-			text-align: center;
-		}
-
-		.section {
-			padding: 80px 0;
 		}
 
 		.featured-card,
-		.article-card,
-		.project-card {
+		.small-card,
+		.empty-card,
+		.category-card {
 			padding: 24px;
 		}
 
+		.meta,
 		footer {
 			flex-direction: column;
 		}
+
+		.meta {
+			gap: 5px;
+		}
 	}
+
+/* AJUSTE VISUAL DO MANIFESTO E CATEGORIAS */
+.manifesto {
+	max-width: 980px;
+	padding-top: 120px;
+	padding-bottom: 110px;
+}
+
+.manifesto .eyebrow {
+	margin-bottom: 34px;
+}
+
+.manifesto h2 {
+	max-width: 920px;
+	font-size: clamp(2.1rem, 4.1vw, 3.9rem);
+	line-height: 1.12;
+	letter-spacing: -0.045em;
+	text-wrap: balance;
+}
+
+.manifesto p {
+	max-width: 760px;
+	margin-top: 38px;
+	color: var(--muted);
+	font-size: 1.08rem;
+	line-height: 1.85;
+}
+
+.category-card {
+	padding: 34px;
+}
+
+.category-card span {
+	display: block;
+	margin-bottom: 22px;
+	line-height: 1.25;
+}
+
+.category-card p {
+	margin-top: 0;
+	line-height: 1.75;
+}
+
+.categories-grid {
+	gap: 22px;
+}
+
 </style>
