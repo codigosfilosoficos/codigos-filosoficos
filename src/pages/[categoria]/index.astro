@@ -1,8 +1,22 @@
 ---
 import { getCollection } from 'astro:content';
-import { categorias, getArticleUrl } from '../../lib/blog';
+import {
+	categorias,
+	getArticleUrl,
+	getCategoriaSlugFromPost,
+} from '../../lib/blog';
+
+export function getStaticPaths() {
+	return categorias.map((categoria) => ({
+		params: { categoria: categoria.slug },
+		props: { categoria },
+	}));
+}
+
+const { categoria } = Astro.props;
 
 const artigos = (await getCollection('artigos', ({ data }) => !data.draft))
+	.filter((artigo) => getCategoriaSlugFromPost(artigo) === categoria.slug)
 	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
 const formatarData = (data: Date) =>
@@ -19,12 +33,9 @@ const formatarData = (data: Date) =>
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
-		<meta
-			name="description"
-			content="Artigos do Códigos Filosóficos sobre cibersegurança, inteligência artificial, filosofia e tecnologia."
-		/>
+		<meta name="description" content={categoria.description} />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<title>Artigos | Códigos Filosóficos</title>
+		<title>{categoria.title} | Códigos Filosóficos</title>
 	</head>
 
 	<body>
@@ -35,7 +46,7 @@ const formatarData = (data: Date) =>
 			</a>
 
 			<nav>
-				<a class="active" href="/artigos/">Artigos</a>
+				<a href="/artigos/">Artigos</a>
 				<a href="/#projetos">Projetos</a>
 				<a href="/#sobre">Sobre</a>
 			</nav>
@@ -43,43 +54,46 @@ const formatarData = (data: Date) =>
 
 		<main>
 			<section class="intro">
-				<p class="eyebrow">PUBLICAÇÕES</p>
-				<h1>Artigos</h1>
-
-				<p class="description">
-					Estudos, experimentos e reflexões sobre segurança, inteligência
-					artificial, filosofia e o futuro da tecnologia.
-				</p>
+				<p class="eyebrow">CATEGORIA</p>
+				<h1>{categoria.title}</h1>
+				<p class="description">{categoria.description}</p>
 			</section>
 
 			<section class="articles">
 				{
-					artigos.map((artigo) => (
-						<article class="card">
-							<div class="meta">
-								<span>{artigo.data.category}</span>
-								<time datetime={artigo.data.pubDate.toISOString()}>
-									{formatarData(artigo.data.pubDate)}
-								</time>
-							</div>
+					artigos.length > 0 ? (
+						artigos.map((artigo) => (
+							<article class="card">
+								<div class="meta">
+									<span>{artigo.data.category}</span>
+									<time datetime={artigo.data.pubDate.toISOString()}>
+										{formatarData(artigo.data.pubDate)}
+									</time>
+								</div>
 
-							<h2>
-								<a href={getArticleUrl(artigo)}>
-									{artigo.data.title}
+								<h2>
+									<a href={getArticleUrl(artigo)}>
+										{artigo.data.title}
+									</a>
+								</h2>
+
+								<p>{artigo.data.description}</p>
+
+								<div class="tags">
+									{artigo.data.tags.map((tag) => <span>{tag}</span>)}
+								</div>
+
+								<a class="read-more" href={getArticleUrl(artigo)}>
+									Ler artigo →
 								</a>
-							</h2>
-
-							<p>{artigo.data.description}</p>
-
-							<div class="tags">
-								{artigo.data.tags.map((tag) => <span>{tag}</span>)}
-							</div>
-
-							<a class="read-more" href={getArticleUrl(artigo)}>
-								Ler artigo →
-							</a>
-						</article>
-					))
+							</article>
+						))
+					) : (
+						<div class="empty">
+							<p>Nenhum artigo publicado nesta categoria ainda.</p>
+							<a href="/artigos/">Ver todos os artigos →</a>
+						</div>
+					)
 				}
 			</section>
 		</main>
@@ -151,9 +165,9 @@ const formatarData = (data: Date) =>
 	}
 
 	.brand span,
-	.active,
 	.eyebrow,
-	.read-more {
+	.read-more,
+	.empty a {
 		color: var(--accent);
 	}
 
@@ -184,13 +198,13 @@ const formatarData = (data: Date) =>
 	}
 
 	h1 {
-		font-size: clamp(3.8rem, 10vw, 7.5rem);
-		line-height: 0.9;
+		font-size: clamp(3.2rem, 8vw, 6.5rem);
+		line-height: 0.92;
 		letter-spacing: -0.065em;
 	}
 
 	.description {
-		max-width: 660px;
+		max-width: 720px;
 		margin-top: 32px;
 		color: var(--muted);
 		font-size: 1.12rem;
@@ -202,11 +216,15 @@ const formatarData = (data: Date) =>
 		gap: 18px;
 	}
 
-	.card {
+	.card,
+	.empty {
 		padding: 38px;
 		border: 1px solid var(--border);
 		border-radius: 10px;
 		background: var(--surface);
+	}
+
+	.card {
 		transition:
 			transform 0.2s ease,
 			border-color 0.2s ease;
@@ -232,7 +250,8 @@ const formatarData = (data: Date) =>
 	}
 
 	.meta time,
-	.card p {
+	.card p,
+	.empty p {
 		color: var(--muted);
 	}
 
@@ -268,7 +287,8 @@ const formatarData = (data: Date) =>
 		font-size: 0.7rem;
 	}
 
-	.read-more {
+	.read-more,
+	.empty a {
 		display: inline-block;
 		margin-top: 28px;
 		font-weight: 700;
@@ -303,7 +323,8 @@ const formatarData = (data: Date) =>
 			padding-top: 75px;
 		}
 
-		.card {
+		.card,
+		.empty {
 			padding: 25px;
 		}
 

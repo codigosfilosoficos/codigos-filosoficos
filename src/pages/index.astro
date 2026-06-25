@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
+import { getArticleUrl } from '../lib/blog';
 
 const year = new Date().getFullYear();
 
@@ -121,7 +122,7 @@ const formatarData = (data: Date) =>
 								</div>
 
 								<h3>
-									<a href={`/artigos/${artigoDestaque.id}/`}>
+									<a href={getArticleUrl(artigoDestaque)}>
 										{artigoDestaque.data.title}
 									</a>
 								</h3>
@@ -130,7 +131,7 @@ const formatarData = (data: Date) =>
 
 								<a
 									class="read-more"
-									href={`/artigos/${artigoDestaque.id}/`}
+									href={getArticleUrl(artigoDestaque)}
 								>
 									Ler artigo →
 								</a>
@@ -152,7 +153,7 @@ const formatarData = (data: Date) =>
 								</div>
 
 								<h3>
-									<a href={`/artigos/${artigo.id}/`}>
+									<a href={getArticleUrl(artigo)}>
 										{artigo.data.title}
 									</a>
 								</h3>
@@ -161,7 +162,7 @@ const formatarData = (data: Date) =>
 
 								<a
 									class="read-more"
-									href={`/artigos/${artigo.id}/`}
+									href={getArticleUrl(artigo)}
 								>
 									Ler artigo →
 								</a>

@@ -5,23 +5,38 @@ import {
 	type CollectionEntry,
 } from 'astro:content';
 
-export async function getStaticPaths() {
-	const artigos = await getCollection(
-		'artigos',
-		({ data }) => !data.draft,
-	);
+import {
+	getArticleUrl,
+	getCategoria,
+	getCategoriaSlugFromPost,
+	getPostSlug,
+} from '../../lib/blog';
 
-	return artigos.map((artigo) => ({
-		params: { id: artigo.id },
-		props: { artigo },
-	}));
+export async function getStaticPaths() {
+	const artigos = await getCollection('artigos', ({ data }) => !data.draft);
+
+	return artigos.map((artigo) => {
+		const categoriaSlug = getCategoriaSlugFromPost(artigo);
+
+		return {
+			params: {
+				categoria: categoriaSlug,
+				slug: getPostSlug(artigo),
+			},
+			props: {
+				artigo,
+				categoria: getCategoria(categoriaSlug),
+			},
+		};
+	});
 }
 
 interface Props {
 	artigo: CollectionEntry<'artigos'>;
+	categoria: ReturnType<typeof getCategoria>;
 }
 
-const { artigo } = Astro.props;
+const { artigo, categoria } = Astro.props;
 const { Content } = await render(artigo);
 
 const dataFormatada = artigo.data.pubDate.toLocaleDateString('pt-BR', {
@@ -39,7 +54,6 @@ const dataFormatada = artigo.data.pubDate.toLocaleDateString('pt-BR', {
 		<meta name="viewport" content="width=device-width" />
 		<meta name="description" content={artigo.data.description} />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-
 		<title>{artigo.data.title} | Códigos Filosóficos</title>
 	</head>
 
@@ -52,17 +66,21 @@ const dataFormatada = artigo.data.pubDate.toLocaleDateString('pt-BR', {
 
 			<nav>
 				<a href="/artigos/">Artigos</a>
-				<a href="/#projetos">Projetos</a>
+				<a href={`/${getCategoriaSlugFromPost(artigo)}/`}>
+					{categoria?.title ?? artigo.data.category}
+				</a>
 				<a href="/#sobre">Sobre</a>
 			</nav>
 		</header>
 
 		<main>
-			<a class="back" href="/artigos/">← Todos os artigos</a>
+			<a class="back" href={`/${getCategoriaSlugFromPost(artigo)}/`}>
+				← {categoria?.title ?? artigo.data.category}
+			</a>
 
 			<article>
 				<header class="article-header">
-					<p class="category">{artigo.data.category}</p>
+					<p class="category">{categoria?.title ?? artigo.data.category}</p>
 
 					<h1>{artigo.data.title}</h1>
 
