@@ -7,8 +7,7 @@ const year = new Date().getFullYear();
 const artigos = (await getCollection('artigos', ({ data }) => !data.draft))
 	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
-const artigoDestaque =
-	artigos.find((artigo) => artigo.data.featured) ?? artigos[0];
+const artigoDestaque = artigos[0];
 
 const artigosRecentes = artigos
 	.filter((artigo) => artigo.id !== artigoDestaque?.id)
