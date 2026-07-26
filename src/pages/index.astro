@@ -13,6 +13,10 @@ const artigosRecentes = artigos
 	.filter((artigo) => artigo.id !== artigoDestaque?.id)
 	.slice(0, 4);
 
+const categoriasComArtigos = categorias.filter((categoria) =>
+	artigos.some((artigo) => artigo.id.startsWith(`${categoria.slug}/`)),
+);
+
 const formatarData = (data: Date) =>
 	data.toLocaleDateString('pt-BR', {
 		day: '2-digit',
@@ -178,7 +182,7 @@ ia  cyber  filosofia  soberania  labs</code></pre>
 
 				<div class="categories-grid">
 					{
-						categorias.map((categoria) => (
+						categoriasComArtigos.map((categoria) => (
 							<a class="category-card" href={`/${categoria.slug}/`}>
 								<span>{categoria.title}</span>
 								<p>{categoria.description}</p>
