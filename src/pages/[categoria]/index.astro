@@ -60,6 +60,33 @@ const formatarData = (data: Date) =>
 				<p class="description">{categoria.description}</p>
 			</section>
 
+			{
+				categoria.slug === 'inteligencia-artificial' && (
+					<a
+						class="series-highlight"
+						href="/inteligencia-artificial/serie-superinteligencia/"
+					>
+						<div class="series-copy">
+							<p class="series-status">
+								SÉRIE CONCLUÍDA · 12 ARTIGOS
+							</p>
+
+							<h2>Superinteligência</h2>
+
+							<p>
+								Uma leitura guiada e autoral do livro de Nick Bostrom,
+								passando pelos caminhos, perigos, controle, poder e
+								soberania digital.
+							</p>
+						</div>
+
+						<span class="series-action">
+							Ver série completa →
+						</span>
+					</a>
+				)
+			}
+
 			<section class="articles">
 				{
 					artigos.length > 0 ? (
@@ -211,6 +238,57 @@ const formatarData = (data: Date) =>
 		font-size: 1.12rem;
 	}
 
+	.series-highlight {
+		margin: -20px 0 52px;
+		padding: 38px;
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		align-items: end;
+		gap: 32px;
+		border: 1px solid rgba(92, 255, 176, 0.28);
+		border-radius: 10px;
+		background:
+			linear-gradient(
+				135deg,
+				rgba(92, 255, 176, 0.09),
+				rgba(15, 20, 26, 0.96)
+			);
+		transition:
+			transform 0.2s ease,
+			border-color 0.2s ease;
+	}
+
+	.series-highlight:hover {
+		transform: translateY(-3px);
+		border-color: rgba(92, 255, 176, 0.62);
+	}
+
+	.series-status {
+		margin-bottom: 14px;
+		color: var(--accent);
+		font-family: monospace;
+		font-size: 0.74rem;
+		font-weight: 700;
+		letter-spacing: 0.14em;
+	}
+
+	.series-highlight h2 {
+		font-size: clamp(2rem, 5vw, 3.4rem);
+	}
+
+	.series-copy > p:last-child {
+		max-width: 670px;
+		margin-top: 16px;
+		color: var(--muted);
+	}
+
+	.series-action {
+		color: var(--accent);
+		font-size: 0.9rem;
+		font-weight: 700;
+		white-space: nowrap;
+	}
+
 	.articles {
 		padding-bottom: 110px;
 		display: grid;
@@ -338,4 +416,18 @@ const formatarData = (data: Date) =>
 			gap: 6px;
 		}
 	}
+	@media (max-width: 700px) {
+		.series-highlight {
+			grid-template-columns: 1fr;
+			align-items: start;
+			gap: 24px;
+			margin-top: -20px;
+			padding: 28px;
+		}
+
+		.series-action {
+			white-space: normal;
+		}
+	}
+
 </style>
