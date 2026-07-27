@@ -1,0 +1,513 @@
+---
+const year = new Date().getFullYear();
+
+const artigos = [
+	{
+		title: 'O que é Superinteligência?',
+		description: 'O conceito central de Nick Bostrom e a possibilidade de uma inteligência superior à humana.',
+		url: '/inteligencia-artificial/o-que-e-superinteligencia/',
+	},
+	{
+		title: 'Inteligência Artificial construída do zero',
+		description: 'Como uma inteligência artificial geral poderia ser desenvolvida diretamente por engenharia.',
+		url: '/inteligencia-artificial/inteligencia-artificial-construida-do-zero/',
+	},
+	{
+		title: 'Emulação Completa do Cérebro',
+		description: 'A possibilidade de reproduzir digitalmente a estrutura e o funcionamento de um cérebro humano.',
+		url: '/inteligencia-artificial/emulacao-completa-do-cerebro/',
+	},
+	{
+		title: 'Inteligência Aumentada',
+		description: 'O uso da tecnologia para ampliar as capacidades cognitivas do próprio ser humano.',
+		url: '/inteligencia-artificial/inteligencia-aumentada/',
+	},
+	{
+		title: 'Interface Cérebro-Computador',
+		description: 'A conexão direta entre o cérebro humano e sistemas computacionais.',
+		url: '/inteligencia-artificial/interface-cerebro-computador/',
+	},
+	{
+		title: 'Sistemas Multiagentes',
+		description: 'Como vários agentes artificiais podem cooperar e formar uma inteligência coletiva.',
+		url: '/inteligencia-artificial/sistemas-multiagentes/',
+	},
+	{
+		title: 'Superinteligência de Velocidade',
+		description: 'Uma mente semelhante à humana, mas capaz de pensar milhares de vezes mais rápido.',
+		url: '/inteligencia-artificial/superinteligencia-de-velocidade/',
+	},
+	{
+		title: 'Superinteligência Coletiva',
+		description: 'A inteligência superior que pode surgir da coordenação entre diversos sistemas.',
+		url: '/inteligencia-artificial/superinteligencia-coletiva/',
+	},
+	{
+		title: 'Superinteligência de Qualidade',
+		description: 'Uma inteligência que não apenas pensa mais rápido, mas pensa de maneira fundamentalmente superior.',
+		url: '/inteligencia-artificial/superinteligencia-de-qualidade/',
+	},
+	{
+		title: 'Explosão de Inteligência',
+		description: 'Quando uma IA começa a acelerar o processo que produz sistemas ainda mais capazes.',
+		url: '/inteligencia-artificial/explosao-de-inteligencia/',
+	},
+	{
+		title: 'O Problema do Controle e do Alinhamento',
+		description: 'O desafio de manter uma inteligência superior submetida aos objetivos e valores humanos.',
+		url: '/inteligencia-artificial/problema-do-controle-e-do-alinhamento/',
+	},
+	{
+		title: 'Superinteligência, poder e soberania digital',
+		description: 'A conclusão da série: quem controlará os chips, os modelos, a infraestrutura e a inteligência do futuro?',
+		url: '/inteligencia-artificial/superinteligencia-poder-e-soberania-digital/',
+	},
+];
+---
+
+<!doctype html>
+<html lang="pt-BR">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+
+		<meta
+			name="description"
+			content="Série Superinteligência: uma leitura guiada e autoral do livro de Nick Bostrom."
+		/>
+
+		<title>Série Superinteligência | Códigos Filosóficos</title>
+	</head>
+
+	<body>
+		<header class="site-header">
+			<div class="header-inner">
+				<a class="brand" href="/">
+					<span class="brand-mark">&lt;/&gt;</span>
+
+					<span>
+						<strong>Códigos Filosóficos</strong>
+						<small>Tecnologia, filosofia e soberania digital</small>
+					</span>
+				</a>
+
+				<nav aria-label="Navegação principal">
+					<a href="/artigos/">Artigos</a>
+					<a href="/defesa-cibernetica/">Defesa Cibernética</a>
+					<a href="/inteligencia-artificial/">IA</a>
+					<a href="/#categorias">Categorias</a>
+				</nav>
+			</div>
+		</header>
+
+		<main>
+			<section class="hero">
+				<div class="hero-content">
+					<a class="breadcrumb" href="/inteligencia-artificial/">
+						← Inteligência Artificial
+					</a>
+
+					<p class="status">SÉRIE CONCLUÍDA · {artigos.length} ARTIGOS</p>
+
+					<h1>Superinteligência</h1>
+
+					<p class="subtitle">
+						Uma leitura guiada e autoral do livro
+						<em>Superinteligência: caminhos, perigos e estratégias</em>,
+						de Nick Bostrom.
+					</p>
+
+					<p class="introduction">
+						Esta série acompanha os principais caminhos apresentados por
+						Bostrom para o surgimento de uma inteligência superior à humana.
+						Partimos das possíveis origens da superinteligência, atravessamos
+						suas diferentes formas e chegamos aos problemas do controle, do
+						poder e da soberania digital.
+					</p>
+				</div>
+			</section>
+
+			<section class="series-section">
+				<div class="section-heading">
+					<div>
+						<p class="eyebrow">ORDEM DE LEITURA</p>
+						<h2>Os artigos da série</h2>
+					</div>
+
+					<span>{artigos.length} capítulos</span>
+				</div>
+
+				<div class="articles-list">
+					{
+						artigos.map((artigo, index) => (
+							<a class="article-card" href={artigo.url}>
+								<span class="article-number">
+									{String(index + 1).padStart(2, '0')}
+								</span>
+
+								<span class="article-content">
+									<strong>{artigo.title}</strong>
+									<p>{artigo.description}</p>
+								</span>
+
+								<span class="article-arrow" aria-hidden="true">→</span>
+							</a>
+						))
+					}
+				</div>
+			</section>
+
+			<section class="closing">
+				<p class="eyebrow">FIM DA PRIMEIRA SÉRIE</p>
+
+				<blockquote>
+					Não encerramos o debate. Encerramos apenas o primeiro mapa
+					para compreendê-lo.
+				</blockquote>
+
+				<a href="/artigos/">Explorar todos os artigos →</a>
+			</section>
+		</main>
+
+		<footer>
+			<p>© {year} Códigos Filosóficos</p>
+			<p>Tecnologia, filosofia, defesa cibernética e soberania digital.</p>
+		</footer>
+	</body>
+</html>
+
+<style>
+	:root {
+		color-scheme: dark;
+		font-family:
+			Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+			"Segoe UI", sans-serif;
+		background: #070b0d;
+		color: #f2f6f4;
+	}
+
+	* {
+		box-sizing: border-box;
+	}
+
+	html {
+		scroll-behavior: smooth;
+	}
+
+	body {
+		margin: 0;
+		min-width: 320px;
+		background:
+			radial-gradient(
+				circle at 75% 8%,
+				rgba(22, 163, 104, 0.13),
+				transparent 29rem
+			),
+			#070b0d;
+		color: #f2f6f4;
+	}
+
+	a {
+		color: inherit;
+		text-decoration: none;
+	}
+
+	.site-header {
+		position: sticky;
+		top: 0;
+		z-index: 10;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+		background: rgba(7, 11, 13, 0.9);
+		backdrop-filter: blur(18px);
+	}
+
+	.header-inner {
+		width: min(1180px, calc(100% - 40px));
+		margin: 0 auto;
+		min-height: 82px;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 30px;
+	}
+
+	.brand {
+		display: flex;
+		align-items: center;
+		gap: 13px;
+	}
+
+	.brand-mark {
+		color: #3ee58b;
+		font-family: monospace;
+		font-size: 1.25rem;
+		font-weight: 800;
+	}
+
+	.brand strong,
+	.brand small {
+		display: block;
+	}
+
+	.brand strong {
+		font-size: 0.98rem;
+		letter-spacing: 0.02em;
+	}
+
+	.brand small {
+		margin-top: 3px;
+		color: #82908a;
+		font-size: 0.7rem;
+	}
+
+	nav {
+		display: flex;
+		align-items: center;
+		gap: 24px;
+		color: #aeb9b4;
+		font-size: 0.84rem;
+	}
+
+	nav a {
+		transition:
+			color 160ms ease,
+			transform 160ms ease;
+	}
+
+	nav a:hover {
+		color: #3ee58b;
+		transform: translateY(-1px);
+	}
+
+	main {
+		width: min(1080px, calc(100% - 40px));
+		margin: 0 auto;
+	}
+
+	.hero {
+		padding: 96px 0 68px;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+	}
+
+	.hero-content {
+		max-width: 850px;
+	}
+
+	.breadcrumb {
+		display: inline-block;
+		margin-bottom: 42px;
+		color: #92a099;
+		font-size: 0.85rem;
+	}
+
+	.breadcrumb:hover {
+		color: #3ee58b;
+	}
+
+	.status,
+	.eyebrow {
+		margin: 0 0 16px;
+		color: #3ee58b;
+		font-family: monospace;
+		font-size: 0.78rem;
+		font-weight: 800;
+		letter-spacing: 0.14em;
+	}
+
+	h1 {
+		margin: 0;
+		max-width: 900px;
+		font-size: clamp(3.4rem, 9vw, 7.2rem);
+		line-height: 0.94;
+		letter-spacing: -0.07em;
+	}
+
+	.subtitle {
+		max-width: 760px;
+		margin: 34px 0 0;
+		color: #c4cec9;
+		font-size: clamp(1.12rem, 2vw, 1.43rem);
+		line-height: 1.65;
+	}
+
+	.introduction {
+		max-width: 760px;
+		margin: 27px 0 0;
+		color: #89958f;
+		font-size: 1rem;
+		line-height: 1.85;
+	}
+
+	.series-section {
+		padding: 74px 0;
+	}
+
+	.section-heading {
+		margin-bottom: 28px;
+		display: flex;
+		align-items: end;
+		justify-content: space-between;
+		gap: 25px;
+	}
+
+	.section-heading h2 {
+		margin: 0;
+		font-size: clamp(2rem, 5vw, 3.2rem);
+		letter-spacing: -0.045em;
+	}
+
+	.section-heading > span {
+		padding-bottom: 7px;
+		color: #76827c;
+		font-family: monospace;
+		font-size: 0.8rem;
+	}
+
+	.articles-list {
+		border-top: 1px solid rgba(255, 255, 255, 0.11);
+	}
+
+	.article-card {
+		display: grid;
+		grid-template-columns: 70px 1fr 35px;
+		align-items: center;
+		gap: 22px;
+		padding: 27px 20px;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+		transition:
+			background 160ms ease,
+			padding-left 160ms ease;
+	}
+
+	.article-card:hover {
+		padding-left: 28px;
+		background: rgba(62, 229, 139, 0.045);
+	}
+
+	.article-number {
+		color: #3ee58b;
+		font-family: monospace;
+		font-size: 0.85rem;
+		font-weight: 800;
+	}
+
+	.article-content strong {
+		display: block;
+		font-size: clamp(1.04rem, 2vw, 1.3rem);
+		line-height: 1.35;
+	}
+
+	.article-content p {
+		margin: 8px 0 0;
+		max-width: 760px;
+		color: #84918b;
+		font-size: 0.9rem;
+		line-height: 1.6;
+	}
+
+	.article-arrow {
+		color: #6d7a74;
+		font-size: 1.35rem;
+		transition:
+			color 160ms ease,
+			transform 160ms ease;
+	}
+
+	.article-card:hover .article-arrow {
+		color: #3ee58b;
+		transform: translateX(5px);
+	}
+
+	.closing {
+		margin-bottom: 80px;
+		padding: 58px;
+		border: 1px solid rgba(62, 229, 139, 0.22);
+		background:
+			linear-gradient(
+				135deg,
+				rgba(62, 229, 139, 0.07),
+				rgba(255, 255, 255, 0.015)
+			);
+	}
+
+	.closing blockquote {
+		max-width: 770px;
+		margin: 22px 0 34px;
+		font-family: Georgia, serif;
+		font-size: clamp(1.6rem, 4vw, 2.7rem);
+		line-height: 1.35;
+		letter-spacing: -0.025em;
+	}
+
+	.closing a {
+		color: #3ee58b;
+		font-size: 0.9rem;
+		font-weight: 700;
+	}
+
+	footer {
+		width: min(1080px, calc(100% - 40px));
+		margin: 0 auto;
+		padding: 34px 0 48px;
+		border-top: 1px solid rgba(255, 255, 255, 0.08);
+		display: flex;
+		justify-content: space-between;
+		gap: 25px;
+		color: #68736e;
+		font-size: 0.75rem;
+	}
+
+	footer p {
+		margin: 0;
+	}
+
+	@media (max-width: 760px) {
+		.header-inner {
+			padding: 19px 0;
+			align-items: flex-start;
+			flex-direction: column;
+		}
+
+		nav {
+			width: 100%;
+			gap: 16px;
+			overflow-x: auto;
+			padding-bottom: 3px;
+		}
+
+		.hero {
+			padding: 65px 0 50px;
+		}
+
+		.breadcrumb {
+			margin-bottom: 32px;
+		}
+
+		.section-heading {
+			align-items: flex-start;
+			flex-direction: column;
+		}
+
+		.article-card {
+			grid-template-columns: 42px 1fr 20px;
+			gap: 12px;
+			padding: 23px 4px;
+		}
+
+		.article-card:hover {
+			padding-left: 8px;
+		}
+
+		.article-content p {
+			display: none;
+		}
+
+		.closing {
+			padding: 34px 27px;
+		}
+
+		footer {
+			flex-direction: column;
+		}
+	}
+</style>
