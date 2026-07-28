@@ -1,7 +1,7 @@
 ---
 title: "Superinteligência, poder e soberania digital: quem controlará a inteligência do futuro?"
 description: "A conclusão da série sobre Nick Bostrom: como superinteligência, infraestrutura tecnológica e concentração de poder podem redefinir a soberania dos países."
-pubDate: 2026-07-27
+pubDate: 2026-07-26
 category: "Inteligência Artificial"
 author: "Matheus Gagliotti"
 tags:

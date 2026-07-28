@@ -1,7 +1,7 @@
 ---
 title: "O Problema do Controle e do Alinhamento em uma Inteligência Artificial"
 description: "Por que uma IA poderosa pode cumprir um objetivo de maneira perigosa e por que desligá-la talvez não seja tão simples quanto parece."
-pubDate: 2026-07-26
+pubDate: 2026-07-23
 category: "Inteligência Artificial"
 author: "Matheus Gagliotti"
 tags:

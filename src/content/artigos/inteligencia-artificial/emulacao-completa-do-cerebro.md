@@ -1,7 +1,7 @@
 ---
 title: "Emulação Completa do Cérebro: uma mente humana pode virar software?"
 description: "Como a digitalização detalhada de um cérebro poderia criar uma mente executável em computador e abrir um caminho até a superinteligência."
-pubDate: 2026-07-11
+pubDate: 2026-07-05
 category: "Inteligência Artificial"
 author: "Matheus Gagliotti"
 tags:

@@ -1,7 +1,7 @@
 ---
 title: "Superinteligência de Qualidade: quando a máquina compreende o que o ser humano não consegue"
 description: "A forma de superinteligência que não pensa apenas mais rápido, mas possui capacidades cognitivas qualitativamente superiores às humanas."
-pubDate: 2026-07-25
+pubDate: 2026-07-17
 category: "Inteligência Artificial"
 author: "Matheus Gagliotti"
 tags:

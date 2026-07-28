@@ -1,7 +1,7 @@
 ---
 title: "Superinteligência Coletiva: quando a rede se torna mais inteligente do que qualquer indivíduo"
 description: "Como a coordenação entre humanos, agentes artificiais e organizações pode formar uma inteligência superior."
-pubDate: 2026-07-12
+pubDate: 2026-07-15
 category: "Inteligência Artificial"
 author: "Matheus Gagliotti"
 tags:

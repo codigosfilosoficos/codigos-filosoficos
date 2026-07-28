@@ -1,7 +1,7 @@
 ---
 title: "Inteligência Artificial construída do zero"
 description: "O caminho da superinteligência por meio de sistemas artificiais criados por engenharia, algoritmos, dados e infraestrutura computacional."
-pubDate: 2026-06-25
+pubDate: 2026-07-03
 category: "Inteligência Artificial"
 author: "Matheus Gagliotti"
 tags:

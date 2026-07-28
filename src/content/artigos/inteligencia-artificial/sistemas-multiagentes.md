@@ -1,7 +1,7 @@
 ---
 title: "Sistemas Multiagentes: quando várias inteligências trabalham em conjunto"
 description: "Como agentes artificiais podem cooperar, competir e formar estruturas coletivas capazes de resolver problemas complexos."
-pubDate: 2026-07-12
+pubDate: 2026-07-11
 category: "Inteligência Artificial"
 author: "Matheus Gagliotti"
 tags:

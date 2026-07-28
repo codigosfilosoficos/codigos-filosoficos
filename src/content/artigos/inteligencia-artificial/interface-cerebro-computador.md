@@ -1,7 +1,7 @@
 ---
 title: "Interface Cérebro-Computador: quando o cérebro se conecta diretamente à máquina"
 description: "Como interfaces capazes de interpretar ou estimular sinais neurais podem transformar medicina, comunicação, trabalho, privacidade e soberania cognitiva."
-pubDate: 2026-07-11
+pubDate: 2026-07-09
 category: "Inteligência Artificial"
 author: "Matheus Gagliotti"
 tags:

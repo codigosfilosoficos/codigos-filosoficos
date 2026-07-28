@@ -1,7 +1,7 @@
 ---
 title: "O que é Superinteligência?"
 description: "Uma introdução ao conceito de superinteligência a partir das ideias de Nick Bostrom e sua relação com inteligência artificial, poder e futuro da humanidade."
-pubDate: 2026-06-25
+pubDate: 2026-07-01
 category: "Inteligência Artificial"
 author: "Matheus Gagliotti"
 tags:

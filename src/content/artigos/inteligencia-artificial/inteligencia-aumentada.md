@@ -1,7 +1,7 @@
 ---
 title: "Inteligência Aumentada: quando a tecnologia amplia a mente humana"
 description: "Como ferramentas, biotecnologia, interfaces cérebro-computador e inteligência artificial podem ampliar capacidades cognitivas humanas."
-pubDate: 2026-07-11
+pubDate: 2026-07-07
 category: "Inteligência Artificial"
 author: "Matheus Gagliotti"
 tags:

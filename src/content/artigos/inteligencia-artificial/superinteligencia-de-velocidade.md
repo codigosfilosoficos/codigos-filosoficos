@@ -1,7 +1,7 @@
 ---
 title: "Superinteligência de Velocidade: quando uma mente pensa milhares de vezes mais rápido"
 description: "Como uma inteligência digital poderia superar seres humanos apenas por pensar, aprender e agir em uma velocidade impossível para o cérebro biológico."
-pubDate: 2026-07-12
+pubDate: 2026-07-13
 category: "Inteligência Artificial"
 author: "Matheus Gagliotti"
 tags:
